@@ -1,0 +1,496 @@
+openapi: 3.0.3
+info:
+  title: CMS - API Orders
+  description: |-
+    description text
+  contact:
+    email: support@codica.gr
+  version: '1.0'
+servers:
+  - url: https://ec.designeroutletathens.gr/api/v1
+tags:
+  - name: ec-order
+    description: Management of orders
+  - name: ec-order-history
+    description: Management of order histories
+  - name: ec-order-status
+    description: Management of order statuses
+paths:
+  /ec-order:
+    get:
+      tags:
+        - ec-order
+      summary: Get orders based on query parameters given
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+          required: true
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: created_from
+          schema:
+            type: string
+            format: datetime
+            example: '2023-09-01 12:00:00'
+          description: To get orders from specific datetime
+        - in: query
+          name: created_until
+          schema:
+            type: string
+            format: datetime
+            example: '2023-09-04 12:00:00'
+          description: To get orders until a datetime
+        - in: query
+          name: order_status_id
+          schema:
+            type: integer
+          description: To get orders based on current status
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: To get orders based on user_id
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderData'
+        '400':
+          $ref: '#/components/responses/ValidatorError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/MissingAbilityError'
+  /ec-order/{orderNum}:
+    get:
+      tags:
+        - ec-order
+      summary: Show all order's connections and data
+      parameters:
+        - name: orderNum
+          in: path
+          description: The order's unique number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/OrderData'
+                  details:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderDetail'
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderProduct'
+                  addresses:
+                    type: object
+                    properties:
+                      shipping:
+                        $ref: '#/components/schemas/OrderAddress'
+                      billing:
+                        $ref: '#/components/schemas/OrderAddress'
+                  history:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderHistory'
+        '400':
+          $ref: '#/components/responses/ValidatorError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/MissingAbilityError'
+  /ec-order-history:
+    post:
+      tags:
+        - ec-order-history
+      summary: Create a new token for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order_status_id
+              type: object
+              properties:
+                order_status_id:
+                  type: integer
+                  example: 1
+                note:
+                  type: string
+                  example: 'some notes'
+                transaction_details:
+                  type: string
+                  example: 'details about transaction'
+                access_id:
+                  type: integer
+                  example: 1
+              oneOf:
+                - type: string
+                  properties:
+                    order_number:
+                      type: string
+                      example: "TG70D301KZ82VOHE"
+                  required:
+                    - order_number
+                - type: integer
+                  properties:
+                    order_id:
+                      type: integer
+                      example: 2
+                  required:
+                    - order_id
+        required: true
+      responses:
+        '201':
+          description: Successful operation. Token Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderHistory'
+        '400':
+          $ref: '#/components/responses/ValidatorError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/MissingAbilityError'
+        '500':
+          description: Error creating Order History
+  /ec-order-status:
+    get:
+      tags:
+        - ec-order-status
+      summary: Get all available order statuses
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+          required: true
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: enabled
+          schema:
+            type: boolean
+          description: To get enabled or not statuses.
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statuses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderStatus'
+
+        '400':
+          $ref: '#/components/responses/ValidatorError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/MissingAbilityError'
+
+security:
+  - bearerAuth: []
+components:
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    MissingAbilityError:
+      description: Token doesn't not have all required abilities
+    UserNotFound:
+      description: User with the given email doesn't exist
+    ValidatorError:
+      description: The required fields are not present/correct.
+  schemas:
+    OrderData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        number:
+          type: string
+          example: "TG70D301KZ82VOHE"
+        user_id:
+          type: integer
+          nullable: true
+          example: 6
+        total:
+          type: number
+          format: float
+          example: 60.640
+        total_base_price:
+          type: number
+          format: float
+          example: 74.310
+        total_discount:
+          type: number
+          format: float
+          example: 24.859
+        total_vat:
+          type: number
+          format: float
+          example: 11.199
+        ec_currency_id:
+          type: integer
+          example: 34
+        delivery_date:
+          type: string
+          format: datetime
+          nullable: true
+          example: "2023-16-10T17:32:28Z"
+        ec_shipping_method_id:
+          type: integer
+          example: 2
+        ec_shipping_method_title:
+          type: string
+          example: "shipMeth1"
+        ec_payment_method_id:
+          type: integer
+          example: 8
+        ec_payment_method_title:
+          type: string
+          example: "Karta"
+        notes:
+          type: string
+          nullable: true
+          example: "some notes"
+        ec_tax_category_id:
+          type: integer
+          example: 1
+        access_id:
+          type: integer
+          example: 1
+    OrderDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Billing test user address"
+        slug:
+          type: string
+          example: "user-test-user-field"
+        value:
+          type: object
+        ec_order_id:
+          type: integer
+          example: 34
+        field_id:
+          type: integer
+          example: 1
+    OrderProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        ec_order_id:
+          type: integer
+          example: 6
+        ec_product_id:
+          type: integer
+          example: 6
+        sku:
+          type: string
+          example: "UUTT-SS"
+        ec_product_name:
+          type: string
+          example: "Tshirt"
+        quantity:
+          type: integer
+          example: 3
+        base_price:
+          type: number
+          format: float
+          example: 8.060
+        discount_amount:
+          type: number
+          format: float
+          example: 2.259
+        tax_amount:
+          type: number
+          format: float
+          example: 1.390
+        final_price:
+          type: number
+          format: float
+          example: 7.200
+        ec_tax_id:
+          type: integer
+          example: 37
+    OrderAddress:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Home"
+        is_billing:
+          type: boolean
+          example: true
+        is_shipping:
+          type: boolean
+          example: true
+        first_name:
+          type: string
+          nullable: true
+          example: "John"
+        last_name:
+          type: string
+          nullable: true
+          example: "Doe"
+        vat_number:
+          type: string
+          nullable: true
+        company_name:
+          type: string
+          nullable: true
+        tax_office:
+          type: string
+          nullable: true
+        occupation:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        ec_country_id:
+          type: integer
+          example: 15
+        ec_state_id:
+          type: integer
+          example: 75
+        latitude:
+          type: string
+          nullable: true
+        longitude:
+          type: string
+          nullable: true
+        zip_code:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        ec_order_id:
+          type: integer
+          example: 124
+        ec_tax_category_id:
+          type: integer
+          nullable: true
+    OrderStatus:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        enabled:
+          type: boolean
+          example: true
+        color:
+          type: string
+          example: "#F63B3B"
+        stock_handling:
+          type: integer
+          example: 2
+        informs_vendor:
+          type: boolean
+          example: false
+        informs_shopper:
+          type: boolean
+          example: false
+        locks_order:
+          type: boolean
+          example: false
+        creates_invoice:
+          type: boolean
+          example: false
+        visible_shopper:
+          type: boolean
+          example: false
+        order:
+          type: integer
+          example: 20
+        title:
+          type: string
+          example: "CANCELED"
+        description:
+          type: string
+          nullable: true
+          example: null
+    OrderHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        ec_order_id:
+          type: integer
+          example: 3
+        ec_order_status_id:
+          type: integer
+          example: 2
+        note:
+          type: string
+          nullable: true
+          example: null
+        transaction_detail:
+          type: string
+          nullable: true
+          example: null
+        stock_control:
+          type: object
+        access_id:
+          type: integer
+          nullable: true
+          example: 3
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
