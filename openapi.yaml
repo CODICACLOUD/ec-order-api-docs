@@ -7,7 +7,7 @@ info:
     email: support@codica.gr
   version: '1.0'
 servers:
-  - url: https://ec.designeroutletathens.gr/api/v1
+  - url: https://domain.com/api/v1
 tags:
   - name: ec-order
     description: Management of orders
