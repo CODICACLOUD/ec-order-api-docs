@@ -1,8 +1,6 @@
 openapi: 3.0.3
 info:
-  title: CMS - API Orders
-  description: |-
-    description text
+  title: Ecommerce - Order API
   contact:
     email: support@codica.gr
   version: '1.0'
