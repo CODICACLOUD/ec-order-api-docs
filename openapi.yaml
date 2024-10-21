@@ -302,6 +302,9 @@ components:
         ec_payment_method_title:
           type: string
           example: "Karta"
+        user_email:
+          type: string
+          example: "foo@bar.com"
         orderTotalBase:
           type: number
           format: float
