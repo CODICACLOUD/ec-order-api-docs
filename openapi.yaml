@@ -457,9 +457,9 @@ components:
         city:
           type: string
           nullable: true
-        country:
+        state:
           type: string
-          nullable: true
+          example: "ΑΤΤΙΚΗΣ"
         ec_country_id:
           type: integer
           example: 15
@@ -481,6 +481,12 @@ components:
         ec_order_id:
           type: integer
           example: 124
+        state_code_2:
+          type: string
+          example: "AT"
+        country_code_2:
+          type: string
+          example: "GR"
         ec_tax_category_id:
           type: integer
           nullable: true
