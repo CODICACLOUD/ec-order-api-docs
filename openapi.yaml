@@ -124,10 +124,6 @@ paths:
                 transaction_details:
                   type: string
                   example: 'details about transaction'
-                access_id:
-                  type: integer
-                  minimum: 1
-                  example: 1
               oneOf:
                 - type: string
                   properties:
@@ -552,10 +548,6 @@ components:
           example: null
         stock_control:
           type: object
-        access_id:
-          type: integer
-          nullable: true
-          example: 3
   securitySchemes:
     bearerAuth:
       type: http
