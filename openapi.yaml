@@ -409,6 +409,26 @@ components:
         ec_tax_id:
           type: integer
           example: 37
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              title:
+                type: string
+                example: "Recycling tax"
+              slug:
+                type: string
+                example: "ec-product-recycling-tax"
+              value:
+                type: string
+                example: "0.082"
+              ec_product_field_Id:
+                type: integer
+                example: 174
     OrderAddress:
       type: object
       properties:
