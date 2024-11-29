@@ -291,6 +291,10 @@ components:
         ec_shipping_method_title:
           type: string
           example: "shipMeth1"
+        ec_shipping_method_tracking_number:
+          type: string
+          nullable: true
+          example: "EL481658844"
         ec_payment_method_id:
           type: integer
           minimum: 1
