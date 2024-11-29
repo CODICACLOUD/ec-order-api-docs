@@ -497,6 +497,9 @@ components:
         ec_order_id:
           type: integer
           example: 124
+        user_address_id:
+          type: integer
+          example: 22844
         state_code_2:
           type: string
           example: "AT"
