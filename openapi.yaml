@@ -101,6 +101,52 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/MissingAbilityError'
+    put:
+      tags:
+        - ec-order
+      summary: Update order details. If the order status locks the order (locks_order == true), an error with code 423 will be returned, and the update will not occur.
+      parameters:
+        - name: orderNum
+          in: path
+          description: The order's unique number
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                delivery_date:
+                  type: string
+                  format: date-time
+                  nullable: true
+                  maximum: 20
+                  example: "2024-12-30 11:00:00"
+                notes:
+                  type: string
+                  nullable: true
+                  maximum: 1000
+                  example: null
+                ec_shipping_method_tracking_number:
+                  type: string
+                  nullable: true
+                  maximum: 100
+                  example: "PP123456785GR"
+      responses:
+        '200':
+          description: Update was successful. OR Resource is already up to date.
+        '400':
+          $ref: '#/components/responses/ValidatorError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/MissingAbilityError'
+        '422':
+          description: At least one parameter is required
+        '423':
+          description: Order is locked, cannot perform update.
   /ec-order-history:
     post:
       tags:
