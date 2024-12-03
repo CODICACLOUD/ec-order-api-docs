@@ -399,6 +399,8 @@ components:
               $ref: '#/components/schemas/OrderAddress'
             billing:
               $ref: '#/components/schemas/OrderAddress'
+        shopper:
+          $ref: '#/components/schemas/Shopper'
     OrderDetail:
       type: object
       properties:
@@ -621,6 +623,55 @@ components:
           example: null
         stock_control:
           type: object
+    Shopper:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          minimum: 1
+        enabled:
+          type: boolean
+          example: true
+        email:
+          type: string
+          example: "foo@bar.com"
+        dod:
+          type: string
+          example: "1998-12-25"
+        gender:
+          type: string
+          example: "male"
+          nullable: true
+        last_logged_in_at:
+          type: string
+          example: "2024-09-24T05:52:01.000000Z"
+        customer_number:
+          type: string
+          example: "NaO6IKsj8lUc1NaO6IKsj8lUc1"
+        preferredLocale:
+          type: string
+          nullable: true
+          example: "el"
+        shopperCategoryIds:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+        translations:
+          $ref: '#/components/schemas/ShopperTranslations'
+    ShopperTranslations:
+      type: object
+      properties:
+        locale:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: "locale's first name"
+            last_name:
+              type: string
+              example: "locale's last name"
   securitySchemes:
     bearerAuth:
       type: http
