@@ -104,7 +104,8 @@ paths:
     put:
       tags:
         - ec-order
-      summary: Update order details. If the order status locks the order (locks_order == true), an error with code 423 will be returned, and the update will not occur.
+      summary: Update order details
+      description: If the order status locks the order (locks_order == true), an error with code 423 will be returned, and the update will not occur.
       parameters:
         - name: orderNum
           in: path
