@@ -451,10 +451,18 @@ components:
           type: number
           format: float
           example: 2.259
+        extra_discount_amount:
+          type: number
+          format: float
+          example: 0.0
         tax_amount:
           type: number
           format: float
           example: 1.390
+        tax_value:
+          type: number
+          format: float
+          example: 0.24
         final_price:
           type: number
           format: float
