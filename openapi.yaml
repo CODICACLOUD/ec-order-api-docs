@@ -135,6 +135,15 @@ paths:
                   nullable: true
                   maximum: 100
                   example: "PP123456785GR"
+                details:
+                  type: object
+                  properties:
+                    billing-user-address-rf-code:
+                      type: string
+                      example: "RF73914198000000000018597"
+                    slug2:
+                      type: string
+                      example: "value2"
       responses:
         '200':
           description: Update was successful. OR Resource is already up to date.
