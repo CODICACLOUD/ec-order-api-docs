@@ -92,9 +92,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  order:
-                    $ref: '#/components/schemas/OrderData'
+                $ref: '#/components/schemas/OrderData'
         '400':
           $ref: '#/components/responses/ValidatorError'
         '401':
