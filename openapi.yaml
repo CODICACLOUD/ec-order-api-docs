@@ -128,6 +128,10 @@ paths:
                   nullable: true
                   maximum: 1000
                   example: null
+                shopper_notes:
+                  type: string
+                  nullable: true
+                  example: null
                 ec_shipping_method_tracking_number:
                   type: string
                   nullable: true
