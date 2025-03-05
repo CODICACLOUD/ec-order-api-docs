@@ -128,10 +128,6 @@ paths:
                   nullable: true
                   maximum: 1000
                   example: null
-                shopper_notes:
-                  type: string
-                  nullable: true
-                  example: null
                 ec_shipping_method_tracking_number:
                   type: string
                   nullable: true
@@ -338,6 +334,9 @@ components:
           type: string
           nullable: true
           example: "some notes"
+        shopper_notes:
+          type: string
+          nullable: true
         ec_tax_category_id:
           type: integer
           minimum: 1
