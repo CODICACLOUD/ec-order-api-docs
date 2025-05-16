@@ -160,6 +160,8 @@ paths:
       tags:
         - ec-order-history
       summary: Create a new history for order
+      description: If informs_vendor, or informs_shopper are not present in request then order status values will be used instead.
+        Send those values only if you want to override order status functionality on email notification.
       requestBody:
         content:
           application/json:
@@ -178,6 +180,12 @@ paths:
                 transaction_details:
                   type: string
                   example: 'details about transaction'
+                informs_vendor:
+                  type: boolean
+                  example: false
+                informs_shopper:
+                  type: boolean
+                  example: false
               oneOf:
                 - type: string
                   properties:
